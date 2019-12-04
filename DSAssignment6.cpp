@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include "Timer.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -55,15 +57,29 @@ void insertionSort(double* theArray,int length)
     }
 }
 
+//need quick sort and another algorithm from the book possibly
+void quickSort(double* theArray,int length)
+{
+    
+}
+
 
 
 
 int main(int arc, char** argv)
 {
+    Timer *timer = new Timer();
     double array [] = {3.0,1.0,2.0,5.0,7.0,8.0,2.3,2.4,2.5,3.77};
     int length = 10;
+    timer->startTimer();
     insertionSort(array,length);
-    for (int i =0; i<length;i++)
-        cout << array[i]<<endl;
+    timer ->stopTimer();
+ 
+    //to change format from scientific notaiton to decimal
+    cout <<"Time elapsed: " <<std::setprecision(15)<<std::showpoint<<std::fixed;
+    cout << timer->getSecondsElapsed() << " seconds"<<endl;
+                
+    cout << "Beginning time: " << timer->getStartTime();
+    cout << "End time: " << timer->getEndTime();
     return 0;
 }
