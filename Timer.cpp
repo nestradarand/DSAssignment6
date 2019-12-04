@@ -26,7 +26,7 @@ double Timer::getSecondsElapsed()
 }
 void Timer::resetTimer()
 {
-    timeElapsed =0;
+    timeElapsed =0.00;
 }
 string Timer::getStartTime()
 {

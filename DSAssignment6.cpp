@@ -2,6 +2,8 @@
 #include <string>
 #include "Timer.h"
 #include <iomanip>
+#include <fstream>
+#include <math.h>
 
 using namespace std;
 
@@ -63,23 +65,93 @@ void quickSort(double* theArray,int length)
     
 }
 
+void copyArray(double* firstArray,double* secondArray,int length)
+{
+    for(int i =0; i <length;i++)
+    {
+        secondArray[i] = firstArray[i];
+    }
+}
 
 
 
 int main(int arc, char** argv)
 {
+    ifstream inputStream;
+    if(!argv[1])
+    {
+        cout << "No text file name entered as argument to open, aborting" << endl;
+        exit(1);
+    }
+    inputStream.open(argv[1]);
+    if(!inputStream)
+    {
+        cout << "Failed to open file"<<endl;
+        exit(1);
+    }
+
+    string fileIn;
+    getline(inputStream,fileIn);
+    //get the number of doubles to sort
+    int length = std::stoi(fileIn);
+    double *array = new double[length];
+    double *secondArray = new double[length];
+    copyArray(array,secondArray,length);
     Timer *timer = new Timer();
-    double array [] = {3.0,1.0,2.0,5.0,7.0,8.0,2.3,2.4,2.5,3.77};
-    int length = 10;
+
+    //read in the data
+    float inFloat;
+    int index= 0;
+    while(getline(inputStream,fileIn))
+    {
+        inFloat = std::stof(fileIn);
+        array[index] = inFloat;
+        index ++;
+    }
+
+    inputStream.close();
+
+    //timing for bubblesort
+    timer->resetTimer();
+    timer->startTimer();
+    bubbleSort(secondArray, length);
+    timer->stopTimer();
+
+    cout << "Time elapsed for bubble sort: " << std::setprecision(15) << std::showpoint << std::fixed;
+    cout << timer->getSecondsElapsed() << " seconds" << endl;
+
+    cout << "Beginning time: " << timer->getStartTime();
+    cout << "End time: " << timer->getEndTime();
+
+    //timing for insertion sort
+    timer ->resetTimer();
     timer->startTimer();
     insertionSort(array,length);
     timer ->stopTimer();
  
     //to change format from scientific notaiton to decimal
-    cout <<"Time elapsed: " <<std::setprecision(15)<<std::showpoint<<std::fixed;
+    cout <<"Time elapsed for insertion sort: " <<std::setprecision(15)<<std::showpoint<<std::fixed;
     cout << timer->getSecondsElapsed() << " seconds"<<endl;
                 
     cout << "Beginning time: " << timer->getStartTime();
     cout << "End time: " << timer->getEndTime();
+
+    
+    //////do fill file with new numbers
+
+    // ofstream outputStream;
+    // outputStream.open("toSort.txt");
+    // srand(time(0));
+    // outputStream << "40000\r\n";
+    // for(int i =0;i<40000;++i)
+    // {
+    //     int toWrite = rand()%50000;
+    //     outputStream << toWrite<<"\r\n";
+    // }
+    // cout << "File Filled"<<endl;
+    // outputStream.close();
+
+    delete array;
+    delete timer;
     return 0;
 }
