@@ -18,7 +18,7 @@ void Timer::stopTimer()
     time(&endTime);
     endClock = clock();
 }
-double Timer::getSecondsElapsed()
+float Timer::getSecondsElapsed()
 {
     double elapsed;
     elapsed = float(endClock-startClock)/CLOCKS_PER_SEC;

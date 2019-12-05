@@ -11,7 +11,7 @@ class Timer
         ~Timer();
         void startTimer();
         void stopTimer();
-        double getSecondsElapsed();
+        float getSecondsElapsed();
         void resetTimer();
         std::string getStartTime();
         std::string getEndTime();
@@ -21,7 +21,7 @@ class Timer
         time_t endTime;
         clock_t startClock;
         clock_t endClock;
-        double timeElapsed;
+        float timeElapsed;
         
 };
 #endif

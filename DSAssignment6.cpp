@@ -7,11 +7,11 @@
 
 using namespace std;
 
-void bubbleSort(double* theArray,int length)
+void bubbleSort(float* theArray,int length)
 {
     for(int i =0; i<length;i++)
     {
-        double temp = 0;
+        float temp = 0;
         for(int j =0; j<(length-1);j++)
         {
             if(theArray[j]> theArray[j+1])
@@ -24,7 +24,7 @@ void bubbleSort(double* theArray,int length)
     }
 }
 
-void selectionSort(double* theArray,int length)
+void selectionSort(float* theArray,int length)
 {
     int i,j,minIndex,tmp;
     for(i=0;i<(length-1);i++)
@@ -44,11 +44,11 @@ void selectionSort(double* theArray,int length)
     }
 }
 
-void insertionSort(double* theArray,int length)
+void insertionSort(float* theArray,int length)
 {
     for(int j=1;j<length;++j)
     {
-        double temp = theArray[j];
+        float temp = theArray[j];
         int k = j;
         while(k>0 && theArray[k-1] >=temp)
         {
@@ -60,17 +60,17 @@ void insertionSort(double* theArray,int length)
 }
 
 //need quick sort and another algorithm from the book possibly
-void quickSort(double* theArray,int length)
+void quickSort(float* theArray,int length)
 {
     
 }
-void merge(double* array, int lpos, int mpos, int rpos)
+void merge(float* array, int lpos, int mpos, int rpos)
 {
     int n1 = mpos - lpos + 1;
     int n2 = rpos - mpos;
 
-    double *L =  new double[n1];
-    double *R = new double[n2];
+    float *L =  new float[n1];
+    float *R = new float[n2];
 
     for (int i = 0; i < n1; i++)
         L[i] = array[lpos + i];
@@ -95,7 +95,7 @@ void merge(double* array, int lpos, int mpos, int rpos)
     
 }
     //inspired by geeksforgeeks.org
-void mergeSort(double *array, int lpos, int rpos)
+void mergeSort(float *array, int lpos, int rpos)
 {
     if (lpos < rpos)
     {
@@ -108,7 +108,7 @@ void mergeSort(double *array, int lpos, int rpos)
     }
 }
 
-void copyArray(double *firstArray, double *secondArray, int length)
+void copyArray(float *firstArray, float *secondArray, int length)
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -133,11 +133,12 @@ void copyArray(double *firstArray, double *secondArray, int length)
 
         string fileIn;
         getline(inputStream, fileIn);
-        //get the number of doubles to sort
+        //get the number of floats to sort
         int length = std::stoi(fileIn);
-        double *array = new double[length];
-        double *secondArray = new double[length];
-        double *thirdArray = new double[length];
+        float *array = new float[length];
+        float *secondArray = new float[length];
+        float *thirdArray = new float[length];
+        float *fourthArray = new float[length];
         Timer *timer = new Timer();
 
         //read in the data
@@ -151,10 +152,13 @@ void copyArray(double *firstArray, double *secondArray, int length)
         }
         copyArray(array, secondArray, length);
         copyArray(array,secondArray,length);
+        copyArray(array,thirdArray,length);
+        copyArray(array,fourthArray,length);
 
         inputStream.close();
 
         //testing merge sort
+        system("read -p 'Press Enter to start merge sort timing...' var");
         timer->startTimer();
         mergeSort(array, 0,(length-1));
         timer->stopTimer();
@@ -164,8 +168,8 @@ void copyArray(double *firstArray, double *secondArray, int length)
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
-       
         //timing for bubblesort
+        system("read -p 'Press Enter to start bubble sort timing...' var");
         timer->resetTimer();
         timer->startTimer();
         bubbleSort(secondArray, length);
@@ -173,16 +177,16 @@ void copyArray(double *firstArray, double *secondArray, int length)
         cout << "---------" << endl;
         cout << "Time elapsed for bubble sort: " << std::setprecision(15) << std::showpoint << std::fixed;
         cout << timer->getSecondsElapsed() << " seconds" << endl;
-
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
+
         //timing for insertion sort
+        system("read -p 'Press Enter to start insertion sort timing...' var");
         timer ->resetTimer();
         timer->startTimer();
         insertionSort(thirdArray,length);
         timer ->stopTimer();
-
         //to change format from scientific notaiton to decimal
         cout << "---------" << endl;
         cout <<"Time elapsed for insertion sort: " <<std::setprecision(15)<<std::showpoint<<std::fixed;
@@ -191,15 +195,28 @@ void copyArray(double *firstArray, double *secondArray, int length)
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
-        //////do fill file with new numbers
+
+        //to clock selection sorting
+        system("read -p 'Press Enter to start selection sort timing...' var");
+        timer->resetTimer();
+        timer->startTimer();
+        selectionSort(fourthArray, length);
+        timer->stopTimer();
+        cout << "---------" << endl;
+        cout << "Time elapsed for selection sort: " << std::setprecision(15) << std::showpoint << std::fixed;
+        cout << timer->getSecondsElapsed() << " seconds" << endl;
+        cout << "Beginning time: " << timer->getStartTime();
+        cout << "End time: " << timer->getEndTime();
+
+        // //////do fill file with new numbers
 
         // ofstream outputStream;
         // outputStream.open("toSort.txt");
         // srand(time(0));
-        // outputStream << "20000\r\n";
-        // for(int i =0;i<20000;++i)
+        // outputStream << "80000\r\n";
+        // for(int i =0;i<80000;++i)
         // {
-        //     int toWrite = rand()%50000;
+        //     float toWrite = float(rand()/float(RAND_MAX/100000.00));
         //     outputStream << toWrite<<"\r\n";
         // }
         // cout << "File Filled"<<endl;
