@@ -59,11 +59,6 @@ void insertionSort(float* theArray,int length)
     }
 }
 
-//need quick sort and another algorithm from the book possibly
-void quickSort(float* theArray,int length)
-{
-    
-}
 void merge(float* array, int lpos, int mpos, int rpos)
 {
     int n1 = mpos - lpos + 1;
@@ -157,19 +152,9 @@ void copyArray(float *firstArray, float *secondArray, int length)
 
         inputStream.close();
 
-        //testing merge sort
-        system("read -p 'Press Enter to start merge sort timing...' var");
-        timer->startTimer();
-        mergeSort(array, 0,(length-1));
-        timer->stopTimer();
-        cout << "---------"<<endl;
-        cout << "Time elapsed for merge sort: " << std::setprecision(15) << std::showpoint << std::fixed;
-        cout << timer->getSecondsElapsed() << " seconds." << endl;
-        cout << "Beginning time: " << timer->getStartTime();
-        cout << "End time: " << timer->getEndTime();
-
         //timing for bubblesort
         system("read -p 'Press Enter to start bubble sort timing...' var");
+        cout << "Sorting. . . "<<endl;
         timer->resetTimer();
         timer->startTimer();
         bubbleSort(secondArray, length);
@@ -183,6 +168,7 @@ void copyArray(float *firstArray, float *secondArray, int length)
 
         //timing for insertion sort
         system("read -p 'Press Enter to start insertion sort timing...' var");
+        cout << "Sorting. . . " << endl;
         timer ->resetTimer();
         timer->startTimer();
         insertionSort(thirdArray,length);
@@ -198,6 +184,7 @@ void copyArray(float *firstArray, float *secondArray, int length)
 
         //to clock selection sorting
         system("read -p 'Press Enter to start selection sort timing...' var");
+        cout << "Sorting. . . " << endl;
         timer->resetTimer();
         timer->startTimer();
         selectionSort(fourthArray, length);
@@ -208,13 +195,29 @@ void copyArray(float *firstArray, float *secondArray, int length)
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
+        //testing merge sort
+        system("read -p 'Press Enter to start merge sort timing...' var");
+        cout << "Sorting. . . " << endl;
+        timer ->resetTimer();
+        timer->startTimer();
+        mergeSort(array, 0, (length - 1));
+        timer->stopTimer();
+        cout << "---------" << endl;
+        cout << "Time elapsed for merge sort: " << std::setprecision(15) << std::showpoint << std::fixed;
+        cout << timer->getSecondsElapsed() << " seconds." << endl;
+        cout << "Beginning time: " << timer->getStartTime();
+        cout << "End time: " << timer->getEndTime();
+
+        delete array;
+        delete timer;
+
         // //////do fill file with new numbers
 
         // ofstream outputStream;
         // outputStream.open("toSort.txt");
         // srand(time(0));
-        // outputStream << "80000\r\n";
-        // for(int i =0;i<80000;++i)
+        // outputStream << "100000\r\n";
+        // for(int i =0;i<100000;++i)
         // {
         //     float toWrite = float(rand()/float(RAND_MAX/100000.00));
         //     outputStream << toWrite<<"\r\n";
@@ -222,7 +225,5 @@ void copyArray(float *firstArray, float *secondArray, int length)
         // cout << "File Filled"<<endl;
         // outputStream.close();
 
-    delete array;
-    delete timer;
     return 0;
 }
