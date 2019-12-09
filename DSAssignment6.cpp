@@ -1,3 +1,10 @@
+/*
+Name: Noah Estrada-Rand
+Student ID#: 2272490
+Chapman email: estra146@mail.chapman.edu
+Course Number and Section: CPSC-350-01
+Assignment: Assignment 6 Sorting Algorithm analysis
+*/
 #include <iostream>
 #include <string>
 #include "Timer.h"
@@ -7,6 +14,7 @@
 
 using namespace std;
 
+//implements basic version of bubble sort by continutally comparing each instance to the preceeding one
 void bubbleSort(float* theArray,int length)
 {
     for(int i =0; i<length;i++)
@@ -23,7 +31,7 @@ void bubbleSort(float* theArray,int length)
         }
     }
 }
-
+//implements basic selection sort by placing each value in its corrects spot on eindex at a time
 void selectionSort(float* theArray,int length)
 {
     int i,j,minIndex,tmp;
@@ -43,7 +51,7 @@ void selectionSort(float* theArray,int length)
         }
     }
 }
-
+//uses a marker and assumes that everything to the left is partially sorted to avoid while loop
 void insertionSort(float* theArray,int length)
 {
     for(int j=1;j<length;++j)
@@ -58,49 +66,64 @@ void insertionSort(float* theArray,int length)
         theArray[k] = temp;
     }
 }
-
-void merge(float* array, int lpos, int mpos, int rpos)
+//takes in three arrays and their sizes to merge the first two into the third one
+void merge(float* arr1,int size1,float* arr2,int size2,float* arr,int sizeArr)
 {
-    int n1 = mpos - lpos + 1;
-    int n2 = rpos - mpos;
-
-    float *L =  new float[n1];
-    float *R = new float[n2];
-
-    for (int i = 0; i < n1; i++)
-        L[i] = array[lpos + i];
-    for (int j = 0; j < n2; j++)
-        R[j] = array[mpos + 1 + j];
-
-    /* Merge the temp arrays back into arr[l..r]*/
-    int s1pos = 0; // Initial index of first subarray
-    int s2pos = 0; // Initial index of second subarray
-    int overallPos = lpos; // Initial index of merged subarray
-    while (s1pos< n1 && s2pos < n2)
+    int i = 0;
+    int j = 0;
+    int x = 0;
+    while(i<size1 && j<size2)
     {
-        if (L[s1pos] <= R[s2pos])
-            array[overallPos++] = L[s1pos++];
-        else
-            array[overallPos++] = R[s2pos++];
+        if(arr1[i]<arr2[j])
+        {
+            arr[x] = arr1[i];
+            x++;
+            i++;
+        }
+        else 
+        {
+            arr[x] = arr2[j];
+            x++;
+            j++;
+        }
     }
-    while (s1pos < n1)
-        array[overallPos++] = L[s1pos++];
-    while (s2pos < n2)
-        array[overallPos++] = R[s2pos++];
-    
+    while(i <size1)
+    {
+        arr[x] = arr1[i];
+        x++;
+        i++;
+    }
+    while(j <size2)
+    {
+        arr[x] = arr2[j];
+        x++;
+        j++;
+    }
 }
-    //inspired by geeksforgeeks.org
-void mergeSort(float *array, int lpos, int rpos)
-{
-    if (lpos < rpos)
-    {
-        int mpos = lpos + (rpos - lpos) / 2;
-        // Sort first and second halves
-        mergeSort(array, lpos, mpos);
-        mergeSort(array, mpos + 1, rpos);
 
-        merge(array, lpos, mpos, rpos);
+//sorts an array of floats by breaking them down then remerging them together
+void mergeSort(float* theArray,int length)
+{
+    if(length <= 1)
+        return;
+    int halfSize = length/2;
+    int backSize = length-halfSize;
+    float *arr1 = new float[halfSize];
+    float *arr2 = new float[backSize];
+    for(int i =0; i <halfSize;++i)
+    {
+        arr1[i] = theArray[i];
     }
+    int index = 0;
+    for(int i = halfSize;i<length;++i)
+    {
+        arr2[index++] = theArray[i];
+    }   
+    mergeSort(arr1,halfSize);
+    mergeSort(arr2,backSize);
+    
+    merge(arr1,halfSize,arr2,backSize,theArray,length);
+
 }
 
 void copyArray(float *firstArray, float *secondArray, int length)
@@ -194,13 +217,15 @@ void copyArray(float *firstArray, float *secondArray, int length)
         cout << timer->getSecondsElapsed() << " seconds" << endl;
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
+  
 
         //testing merge sort
         system("read -p 'Press Enter to start merge sort timing...' var");
         cout << "Sorting. . . " << endl;
         timer ->resetTimer();
         timer->startTimer();
-        mergeSort(array, 0, (length - 1));
+        // mergeSort(array, 0, (length - 1));
+        mergeSort(array,length);
         timer->stopTimer();
         cout << "---------" << endl;
         cout << "Time elapsed for merge sort: " << std::setprecision(15) << std::showpoint << std::fixed;
@@ -208,16 +233,23 @@ void copyArray(float *firstArray, float *secondArray, int length)
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
+        for(int i =0; i <length;++i)
+            cout <<secondArray[i]<<endl;
+
+
         delete array;
+        delete secondArray;
+        delete thirdArray;
+        delete fourthArray;
         delete timer;
 
-        // //////do fill file with new numbers
+        // // //////do fill file with new numbers
 
         // ofstream outputStream;
         // outputStream.open("toSort.txt");
         // srand(time(0));
-        // outputStream << "100000\r\n";
-        // for(int i =0;i<100000;++i)
+        // outputStream << "1000000\r\n";
+        // for(int i =0;i<1000000;++i)
         // {
         //     float toWrite = float(rand()/float(RAND_MAX/100000.00));
         //     outputStream << toWrite<<"\r\n";
