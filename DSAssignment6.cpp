@@ -15,11 +15,11 @@ Assignment: Assignment 6 Sorting Algorithm analysis
 using namespace std;
 
 //implements basic version of bubble sort by continutally comparing each instance to the preceeding one
-void bubbleSort(float* theArray,int length)
+void bubbleSort(double* theArray,int length)
 {
     for(int i =0; i<length;i++)
     {
-        float temp = 0;
+        double temp = 0;
         for(int j =0; j<(length-1);j++)
         {
             if(theArray[j]> theArray[j+1])
@@ -32,7 +32,7 @@ void bubbleSort(float* theArray,int length)
     }
 }
 //implements basic selection sort by placing each value in its corrects spot on eindex at a time
-void selectionSort(float* theArray,int length)
+void selectionSort(double* theArray,int length)
 {
     int i,j,minIndex,tmp;
     for(i=0;i<(length-1);i++)
@@ -52,11 +52,11 @@ void selectionSort(float* theArray,int length)
     }
 }
 //uses a marker and assumes that everything to the left is partially sorted to avoid while loop
-void insertionSort(float* theArray,int length)
+void insertionSort(double* theArray,int length)
 {
     for(int j=1;j<length;++j)
     {
-        float temp = theArray[j];
+        double temp = theArray[j];
         int k = j;
         while(k>0 && theArray[k-1] >=temp)
         {
@@ -67,7 +67,7 @@ void insertionSort(float* theArray,int length)
     }
 }
 //takes in three arrays and their sizes to merge the first two into the third one
-void merge(float* arr1,int size1,float* arr2,int size2,float* arr,int sizeArr)
+void merge(double* arr1,int size1,double* arr2,int size2,double* arr,int sizeArr)
 {
     int i = 0;
     int j = 0;
@@ -101,15 +101,15 @@ void merge(float* arr1,int size1,float* arr2,int size2,float* arr,int sizeArr)
     }
 }
 
-//sorts an array of floats by breaking them down then remerging them together
-void mergeSort(float* theArray,int length)
+//sorts an array of doubles by breaking them down then remerging them together
+void mergeSort(double* theArray,int length)
 {
     if(length <= 1)
         return;
     int halfSize = length/2;
     int backSize = length-halfSize;
-    float *arr1 = new float[halfSize];
-    float *arr2 = new float[backSize];
+    double *arr1 = new double[halfSize];
+    double *arr2 = new double[backSize];
     for(int i =0; i <halfSize;++i)
     {
         arr1[i] = theArray[i];
@@ -125,10 +125,10 @@ void mergeSort(float* theArray,int length)
     merge(arr1,halfSize,arr2,backSize,theArray,length);
 
 }
-
-void copyArray(float *firstArray, float *secondArray, int length)
+//used to copy one array to another
+void copyArray(double *firstArray, double *secondArray, int length)
 {
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < length; ++i)
     {
         secondArray[i] = firstArray[i];
     }
@@ -136,6 +136,25 @@ void copyArray(float *firstArray, float *secondArray, int length)
 
     int main(int arc, char **argv)
     {
+        //if any 3rd numeric argument given fill file with new randomized numbers
+        //otherwise just use the file that was already created
+        if(argv[2])
+        {
+            int numWrite = std::stoi(argv[2]);
+            ofstream outputStream;
+            outputStream.open(argv[1]);
+            srand(time(0));
+            outputStream << numWrite<<"\r\n";
+            for (int i = 0; i < numWrite; ++i)
+            {
+                double toWrite = double(rand() / double(RAND_MAX / 100000.00));
+                outputStream << toWrite << "\r\n";
+            }
+            cout << "File Filled with new random numbers" << endl;
+            outputStream.close();
+        }      
+
+
         ifstream inputStream;
         if (!argv[1])
         {
@@ -151,29 +170,33 @@ void copyArray(float *firstArray, float *secondArray, int length)
 
         string fileIn;
         getline(inputStream, fileIn);
-        //get the number of floats to sort
+        //get the number of doubles to sort
         int length = std::stoi(fileIn);
-        float *array = new float[length];
-        float *secondArray = new float[length];
-        float *thirdArray = new float[length];
-        float *fourthArray = new float[length];
+        double *array = new double[length];
+        double *secondArray = new double[length];
+        double *thirdArray = new double[length];
+        double *fourthArray = new double[length];
         Timer *timer = new Timer();
 
+     
+
         //read in the data
-        float inFloat;
+        double indouble;
         int index = 0;
         while (getline(inputStream, fileIn))
         {
-            inFloat = std::stof(fileIn);
-            array[index] = inFloat;
+            indouble = std::stof(fileIn);
+            array[index] = indouble;
             index++;
         }
+        inputStream.close();
+        //make copies of each array
         copyArray(array, secondArray, length);
         copyArray(array,secondArray,length);
         copyArray(array,thirdArray,length);
         copyArray(array,fourthArray,length);
 
-        inputStream.close();
+
 
         //timing for bubblesort
         system("read -p 'Press Enter to start bubble sort timing...' var");
@@ -233,29 +256,14 @@ void copyArray(float *firstArray, float *secondArray, int length)
         cout << "Beginning time: " << timer->getStartTime();
         cout << "End time: " << timer->getEndTime();
 
-        for(int i =0; i <length;++i)
-            cout <<secondArray[i]<<endl;
-
-
-        delete array;
-        delete secondArray;
-        delete thirdArray;
-        delete fourthArray;
+        //delete all dynamically allocated memory
+        delete [] array;
+        delete  [] secondArray;
+        delete  [] thirdArray;
+        delete  [] fourthArray;
         delete timer;
 
-        // // //////do fill file with new numbers
 
-        // ofstream outputStream;
-        // outputStream.open("toSort.txt");
-        // srand(time(0));
-        // outputStream << "1000000\r\n";
-        // for(int i =0;i<1000000;++i)
-        // {
-        //     float toWrite = float(rand()/float(RAND_MAX/100000.00));
-        //     outputStream << toWrite<<"\r\n";
-        // }
-        // cout << "File Filled"<<endl;
-        // outputStream.close();
 
     return 0;
 }
